@@ -1,3 +1,6 @@
+# Changes to the official driver:
+Fixed timestamp to local time and using covariances in order to work with robot_localization.
+
 # sbg_driver
 
 [![Build Status](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2Fbuild.ros.org%2Fjob%2FMdev__sbg_driver__ubuntu_bionic_amd64%2F&label=Ubuntu%20bionic)](http://build.ros.org/job/Mdev__sbg_driver__ubuntu_bionic_amd64/) [![Build Status](https://img.shields.io/jenkins/build?jobUrl=http%3A%2F%2Fbuild.ros.org%2Fjob%2FKdev__sbg_driver__ubuntu_xenial_amd64%2F&label=Ubuntu%20xenial)](http://build.ros.org/job/Kdev__sbg_driver__ubuntu_xenial_amd64/)
