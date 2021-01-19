@@ -29,8 +29,10 @@ const std_msgs::Header MessageWrapper::createRosHeader(uint32_t device_timestamp
 
   if (!m_first_valid_utc_)
   {
-    header.stamp    = m_ros_processing_time_;
+    header.stamp    = ros::Time::now(); //m_ros_processing_time_;
     header.frame_id = "System";
+    header.frame_id = "imu_frame";
+
   }
   else
   {
@@ -68,6 +70,7 @@ const std_msgs::Header MessageWrapper::createRosHeader(uint32_t device_timestamp
     }
 
     header.frame_id = frame_header;
+    header.frame_id = "imu_frame";
   }
 
   return header;
@@ -646,11 +649,47 @@ const sensor_msgs::Imu MessageWrapper::createRosImuMessage(const sbg_driver::Sbg
 
   imu_ros_message.header = createRosHeader(ref_sbg_imu_msg.time_stamp);
 
-  imu_ros_message.orientation                       = ref_sbg_quat_msg.quaternion;
-  imu_ros_message.angular_velocity                  = ref_sbg_imu_msg.gyro;
-  imu_ros_message.angular_velocity_covariance[0]    = -1;
-  imu_ros_message.linear_acceleration               = ref_sbg_imu_msg.accel;
-  imu_ros_message.linear_acceleration_covariance[0] = -1;
+  imu_ros_message.header.stamp = ros::Time::now();
+
+  // NED
+  //imu_ros_message.orientation.w                       = ref_sbg_quat_msg.quaternion.w;
+  //imu_ros_message.orientation.x                       = ref_sbg_quat_msg.quaternion.x;
+  //imu_ros_message.orientation.y                       = ref_sbg_quat_msg.quaternion.y;
+  //imu_ros_message.orientation.z                       = ref_sbg_quat_msg.quaternion.z;
+  //imu_ros_message.angular_velocity.x                  = ref_sbg_imu_msg.gyro.x;
+  //imu_ros_message.angular_velocity.y                  = ref_sbg_imu_msg.gyro.y;
+  //imu_ros_message.angular_velocity.z                  = ref_sbg_imu_msg.gyro.z;
+  //imu_ros_message.linear_acceleration.x               = ref_sbg_imu_msg.accel.x;
+  //imu_ros_message.linear_acceleration.y               = ref_sbg_imu_msg.accel.y;
+  //imu_ros_message.linear_acceleration.z               = ref_sbg_imu_msg.accel.z;
+
+  //ENU
+  // swap x and y and negate z
+  imu_ros_message.orientation.w                       = ref_sbg_quat_msg.quaternion.w;
+  imu_ros_message.orientation.x                       = ref_sbg_quat_msg.quaternion.y;
+  imu_ros_message.orientation.y                       = ref_sbg_quat_msg.quaternion.x;
+  imu_ros_message.orientation.z                       = -ref_sbg_quat_msg.quaternion.z;
+  // acceleration swap x y negate z
+  imu_ros_message.angular_velocity.x                  = ref_sbg_imu_msg.gyro.y;
+  imu_ros_message.angular_velocity.y                  = ref_sbg_imu_msg.gyro.x;
+  imu_ros_message.angular_velocity.z                  = -ref_sbg_imu_msg.gyro.z;
+  // angular rates swap  x y and negate z
+  imu_ros_message.linear_acceleration.x               = ref_sbg_imu_msg.accel.y;
+  imu_ros_message.linear_acceleration.y               = ref_sbg_imu_msg.accel.x;
+  imu_ros_message.linear_acceleration.z               = -ref_sbg_imu_msg.accel.z;
+
+
+  imu_ros_message.orientation_covariance[0]           = 0.001;
+  imu_ros_message.orientation_covariance[4]           = 0.001;
+  imu_ros_message.orientation_covariance[8]           = 0.001;
+  
+  imu_ros_message.angular_velocity_covariance[0]      = 0.001;
+  imu_ros_message.angular_velocity_covariance[4]      = 0.001;
+  imu_ros_message.angular_velocity_covariance[8]      = 0.001;
+
+  imu_ros_message.linear_acceleration_covariance[0]   = 0.001;
+  imu_ros_message.linear_acceleration_covariance[4]   = 0.001;
+  imu_ros_message.linear_acceleration_covariance[8]   = 0.001;
 
   return imu_ros_message;
 }

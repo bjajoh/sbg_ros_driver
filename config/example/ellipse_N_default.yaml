@@ -11,7 +11,7 @@ confWithRos: true
 
 uartConf:
   # Port Name
-  portName: "/dev/sbg"
+  portName: "/dev/ttyUSB0"
 
   # Baude rate (4800 ,9600 ,19200 ,38400 ,115200 [default],230400 ,460800 ,921600)
   baudRate: 115200
@@ -89,7 +89,7 @@ aidingAssignment:
   # 2 Module connected on PORT_C
   # 3 Module connected on PORT_D
   # 5 Module is connected internally
-  gnss1ModulePortAssignment: 5
+  gnss1ModulePortAssignment: 255
   # GNSS module sync assignment:
   # 0 Module is disabled
   # 1 Synchronization is done using SYNC_IN_A pin
@@ -99,16 +99,14 @@ aidingAssignment:
   # 5 Synchronization is internal
   # 6 Synchronization is done using SYNC_OUT_A pin
   # 7 Synchronization is done using SYNC_OUT_B pin
-  gnss1ModuleSyncAssignment: 5
-  # RTCM input port assignment for Ellipse-N DGPS (see gnss1ModulePortAssignment for values)
+  gnss1ModuleSyncAssignment: 0
+  # RTCM input port assignment for Ellipse-N DGPS
   rtcmPortAssignment: 255
   # Odometer module pin assignment
   # 0 Odometer is disabled
   # 1 Odometer connected only to ODO_A (unidirectional).
   # 2 Odometer connected to both ODO_A (signal A) and ODO_B (Signal B or direction) for bidirectional odometer.
   odometerPinAssignment: 0
-
-
 
 magnetometer:
   # Magnetometer model ID
@@ -240,7 +238,7 @@ output:
   # Includes roll, pitch, yaw and their accuracies on each axis
   log_ekf_euler: 0
   # Includes the 4 quaternions values
-  log_ekf_quat: 0
+  log_ekf_quat: 8
   # Position and velocities in NED coordinates with the accuracies on each axis
   log_ekf_nav: 0
   # Heave, surge and sway and accelerations on each axis for up to 4 points
@@ -269,7 +267,7 @@ output:
   # Air data
   log_air_data: 0
   # Short IMU data
-  log_imu_short: 0
+  log_imu_short: 8
 
   # Node frequency (Hz) (if set to 0, the node will decide the most appropriate frequency to run)
   frequency: 0
